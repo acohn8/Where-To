@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="search.js"></script>
+  <script src="mapboxmap.js"></script>
+  <script src="venue_geojson.js"></script>
+  <script src="venues.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="overlay">
+    <form id=search>
+      <input type="text" id="search-box">
+      <input type="submit" value="Search">
+    </form>
+    <div id="reset-pos">Reset Position</div>
+    <div id="results"></div>
+</div>
+  <div id="map"></div>
+</body>
+</html>
