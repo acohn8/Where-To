@@ -36,17 +36,18 @@ class MapboxMap {
 
   plotVenues() {
     this.map.addLayer(makeGeoJson());
-    this.createBoundingBox()
+    this.createBoundingBox();
   }
 
+
   createBoundingBox() {
-    const boundingBox = turf.bbox(this.map.getSource('venues')._data)
+    const boundingBox = turf.bbox(this.map.getSource('venues')._data);
     this.map.fitBounds(boundingBox, { padding: 10 });
   }
 
   enableReCentering() {
     this.map.on('click', 'venues', (e) => {
-      const targetId = e.features[0].properties.foursquareId
+      const targetId = e.features[0].properties.foursquareId;
       const targetVenue = Venue.all.filter(venue => venue.foursquareId === targetId);
       targetVenue[0].renderInfo();
     });

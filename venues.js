@@ -27,7 +27,7 @@ class Venue {
     savedPosition.push(loadedMap.map.getCenter());
     savedPosition.push(loadedMap.map.getZoom());
     const resultsDiv = document.querySelector('div#results');
-    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 18);
+    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 17);
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML +=
         `<div id="show-venue">
@@ -37,9 +37,9 @@ class Venue {
             <p>${this.formattedAddress}</p>
             <p>${this.phone}</p>
             <form id="new-review">
-              Name: <input type="text" id="user-name"> <br/>
-              Review: <input type="text" id="venue-review"> <br/>
-              <input type="submit" value="Post">
+              <h3>Leave a review</h3>
+              <input type="text" id="user-name" placeholder="Name"> <br/>
+              <textarea id="venue-review" placeholder="Review"> </textarea><br/>
             </form>
         </div>`;
     this.backToFullListing();
