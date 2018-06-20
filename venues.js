@@ -1,3 +1,5 @@
+let savedPosition = [];
+
 class Venue {
   constructor(name, latitude, longitude, formattedAddress, category, phone, foursquareId) {
     this.name = name;
@@ -16,25 +18,31 @@ class Venue {
   }
 
   infoPage() {
-    const resultsDiv = document.querySelector('div#results');
     this.infoDiv().addEventListener('click', () => {
-      loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 18);
-      resultsDiv.innerHTML = '';
-      resultsDiv.innerHTML +=
-        `<div id="show-venue">
-        <div id='back'>Back</div>
-        <h2>${this.name}</h2>
-        <p><em>${this.category}</em></p>
-        <p>${this.formattedAddress}</p>
-        <p>${this.phone}</p>
-        <form id="new-review">
-          Name: <input type="text" id="user-name"> <br/>
-          Review: <input type="text" id="venue-review"> <br/>
-          <input type="submit" value="Post">
-        </form>
-        </div>`;
-      this.backToFullListing();
+      this.renderInfo();
     });
+  }
+
+  renderInfo() {
+    savedPosition.push(loadedMap.map.getCenter());
+    savedPosition.push(loadedMap.map.getZoom());
+    const resultsDiv = document.querySelector('div#results');
+    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 18);
+    resultsDiv.innerHTML = '';
+    resultsDiv.innerHTML +=
+        `<div id="show-venue">
+          <div id='back'>Back</div>
+            <h2>${this.name}</h2>
+            <p><em>${this.category}</em></p>
+            <p>${this.formattedAddress}</p>
+            <p>${this.phone}</p>
+            <form id="new-review">
+              Name: <input type="text" id="user-name"> <br/>
+              Review: <input type="text" id="venue-review"> <br/>
+              <input type="submit" value="Post">
+            </form>
+        </div>`;
+    this.backToFullListing();
   }
 
   backToFullListing() {
@@ -42,8 +50,10 @@ class Venue {
     const backDiv = document.querySelector('div#back');
     backDiv.addEventListener('click', () => {
       resultsDiv.innerHTML = '';
-      Venue.all.forEach(venue => venue.appendResults())
-      Venue.all.forEach(venue => venue.infoPage())
+      Venue.all.forEach(venue => venue.appendResults());
+      Venue.all.forEach(venue => venue.infoPage());
+      loadedMap.zoomToLocation(savedPosition[0], savedPosition[1]);
+      savedPosition = [];
     });
   }
 
@@ -51,21 +61,11 @@ class Venue {
     const venueList = document.querySelector('div#results');
     venueList.innerHTML +=
       `<div id="venue" data-id="${this.foursquareId}">
-      <h3>${this.name}</h3>
-      <p>${this.formattedAddress[0]}</p>
+        <h3>${this.name}</h3>
+        <p>${this.formattedAddress[0]}</p>
       </div>`;
   }
 }
-
-// function zoomToVenue() {
-//   const venueDivs = document.querySelectorAll('div#venue');
-//   venueDivs.forEach((div) => {
-//     div.addEventListener('click', () => {
-//       const clickedVenue = Venue.all.filter(venue => venue.foursquareId === div.dataset.id)[0];
-//       loadedMap.zoomToLocation({ lng: clickedVenue.longitude, lat: clickedVenue.latitude }, 18);
-//     });
-//   });
-// }
 
 let venueId = 0;
 Venue.all = [];

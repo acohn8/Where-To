@@ -8,7 +8,7 @@ class MapboxMap {
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [-98.5795, 39.8283],
-      zoom: 2,
+      zoom: 4,
     });
     loadedMap = this;
   }
@@ -31,18 +31,26 @@ class MapboxMap {
       positionOptions: {
         enableHighAccuracy: true,
       },
-      trackUserLocation: false,
     }));
   }
 
   plotVenues() {
     this.map.addLayer(makeGeoJson());
+    this.createBoundingBox()
+  }
+
+  createBoundingBox() {
+    const boundingBox = turf.bbox(this.map.getSource('venues')._data)
+    this.map.fitBounds(boundingBox, { padding: 10 });
   }
 
   enableReCentering() {
     this.map.on('click', 'venues', (e) => {
-      this.zoomToLocation(e.lngLat);
+      const targetId = e.features[0].properties.foursquareId
+      const targetVenue = Venue.all.filter(venue => venue.foursquareId === targetId);
+      targetVenue[0].renderInfo();
     });
+
     this.map.on('mouseenter', 'venues', () => {
       this.map.getCanvas().style.cursor = 'pointer';
     });

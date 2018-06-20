@@ -1,26 +1,54 @@
 body {
-  margin:0;
-  padding:0;
+  color: #404040;
+  margin: 0;
+  padding: 0;
 }
 
-#reset-pos {
-  cursor: pointer;
-  color: blue;
+h3 {
+  color: #7676AD;
 }
 
+#header {
+  background-color: ;
+  color: #7676AD;
+}
+
+#search {
+  max-width: 95%;
+}
+
+#search-box {
+  margin-top: 10px;
+  width: 95%;
+  height: 30px;
+  font-size: 18px;
+  display: inline-block;
+}
+#venue {
+  border-bottom: 1px solid #eee;
+}
 #venue:hover {
   background-color: silver;
   cursor: pointer;
+}
+#back:hover {
+  margin: 10px;
+  cursor: pointer;
+}
+
+#back {
+  margin: 10px;
 }
 
 #overlay {
   float: left;
   background-color: white;
   position: absolute;
-  width: 300px;
-  height: 95%;
-  z-index: 2;
+  width: 20%;
+  max-height: 100%;
   overflow: scroll;
+  padding-left: 10px;
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 #map {
@@ -28,4 +56,8 @@ body {
   top:0;
   bottom:0;
   width:100%;
+  border-left: 1px solid #fff;
+  position: absolute;
+  left: 20%;
+  width: 80%;
 }

@@ -8,7 +8,7 @@ class Search {
   search() {
     loadedMap.clearPoints();
     return fetch(`https://api.foursquare.com/v2/venues/search?ll=${loadedMap.map.getCenter().lat},${loadedMap.map.getCenter().lng}&query=${this.searchTerm}&oauth_token=${foursquareKey}`)
-      .then(res => res.json()).then(json => this.createVenues(json));
+      .then(res => res.json()).then(json => this.createVenues(json))
   }
 
   addSearchResults() {

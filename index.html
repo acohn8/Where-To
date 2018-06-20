@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
   <script src="search.js"></script>
   <script src="mapboxmap.js"></script>
   <script src="venue_geojson.js"></script>
@@ -15,12 +16,12 @@
 </head>
 <body>
   <div id="overlay">
-    <form id=search>
+    <h1 id="header">Search:</h1>
+    <form id="search">
       <input type="text" id="search-box">
-      <input type="submit" value="Search">
     </form>
     <div id="results"></div>
-</div>
+  </div>
   <div id="map"></div>
 </body>
 </html>
