@@ -22,15 +22,9 @@ ActiveRecord::Schema.define(version: 2018_06_18_152404) do
   end
 
   create_table "reviews", force: :cascade do |t|
+    t.string "user"
     t.text "content"
-    t.integer "user_id"
     t.integer "place_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

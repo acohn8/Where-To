@@ -20,8 +20,10 @@ function makeGeoJson() {
       },
     },
     paint: {
-      'circle-radius': 9,
       'circle-color': '#8a8acb',
+      'circle-radius': 6,
+      'circle-stroke-width': 1.5,
+      'circle-stroke-color': '#ffffff',
     },
   };
 }

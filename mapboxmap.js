@@ -4,25 +4,17 @@ let loadedMap;
 
 class MapboxMap {
   constructor() {
-    this.startingPosition = {};
     this.map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
-      center: [-98.5795, 39.8283], // starting position [lng, lat]
-      zoom: 2, // starting zoom
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v9',
+      center: [-98.5795, 39.8283],
+      zoom: 2,
     });
     loadedMap = this;
   }
 
   zoomToLocation(coords, newZoom = 14) {
     this.map.flyTo({ center: coords, zoom: newZoom });
-  }
-
-  resetPosition() {
-    const button = document.getElementById('reset-pos');
-    button.addEventListener('click', () => {
-      this.zoomToLocation(this.startingPosition);
-    });
   }
 
   clearPoints() {
@@ -35,13 +27,12 @@ class MapboxMap {
   }
 
   getUserLocation() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const userPosition = { lng: position.coords.longitude, lat: position.coords.latitude };
-      this.position = userPosition;
-      this.zoomToLocation(userPosition);
-      this.startingPosition = userPosition;
-    });
-    this.resetPosition();
+    this.map.addControl(new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: false,
+    }));
   }
 
   plotVenues() {
@@ -61,7 +52,6 @@ class MapboxMap {
   }
 }
 
-
 function init() {
   const map = new MapboxMap();
   map.getUserLocation();
@@ -70,3 +60,4 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', (init));
+
