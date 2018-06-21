@@ -5,6 +5,7 @@ class Venue {
     this.name = name;
     this.latitude = latitude;
     this.longitude = longitude;
+    this.distance = this.calculateDistance();
     this.formattedAddress = formattedAddress;
     this.category = category;
     this.phone = phone;
@@ -23,16 +24,31 @@ class Venue {
     });
   }
 
+  fromPoint() {
+    if (userLocation.length === 2) {
+      return turf.point(userLocation);
+    }
+    return turf.point([loadedMap.map.getCenter().lng, loadedMap.map.getCenter().lat]);
+  }
+
+  calculateDistance() {
+    const from = this.fromPoint();
+    const options = { units: 'miles' };
+    const to = [this.longitude, this.latitude];
+    return turf.distance(from, to, options);
+  }
+
   renderInfo() {
     savedPosition.push(loadedMap.map.getCenter());
     savedPosition.push(loadedMap.map.getZoom());
     const resultsDiv = document.querySelector('div#results');
-    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 17.5, 55, 0.8);
+    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 16.77, 55, 0.8);
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML +=
         `<div id="show-venue">
           <div id='back'>Back</div>
             <h2>${this.name}</h2>
+            <strong>${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</strong>
             <p><em>${this.category}</em></p>
             <p>${this.formattedAddress}</p>
             <p>${this.phone}</p>
@@ -62,9 +78,14 @@ class Venue {
     venueList.innerHTML +=
       `<div id="venue" data-id="${this.foursquareId}">
         <h3>${this.name}</h3>
+        <strong>${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles </strong>
         <p>${this.formattedAddress[0]}</p>
       </div>`;
   }
+}
+
+function sortByDistance() {
+  Venue.all.sort((a, b) => a.distance - b.distance);
 }
 
 let venueId = 0;

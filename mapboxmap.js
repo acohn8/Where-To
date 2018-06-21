@@ -1,6 +1,6 @@
 mapboxgl.accessToken = '';
 
-let userLocation;
+let userLocation = [];
 
 let loadedMap;
 
@@ -10,7 +10,7 @@ class MapboxMap {
       container: 'map',
       style: 'mapbox://styles/adamcohn/cjim8q06y01b52srxxq1an9sy',
       center: [-98.5795, 39.8283],
-      zoom: 4,
+      zoom: 3,
     });
     loadedMap = this;
   }
@@ -34,9 +34,10 @@ class MapboxMap {
     const geoLocate = new mapboxgl.GeolocateControl();
     this.map.addControl(geoLocate);
     geoLocate.on('geolocate', (e) => {
-      userLocation = { lng: e.coords.longitude, lat: e.coords.latitude };
-      this.zoomToLocation(userLocation)
-      // this.map.setPitch(0)
+      userLocation = [];
+      userLocation.push(e.coords.longitude);
+      userLocation.push(e.coords.latitude);
+      this.zoomToLocation(userLocation);
     });
   }
 
@@ -92,7 +93,7 @@ class MapboxMap {
           15, 0,
           15.05, ['get', 'min_height'],
         ],
-        'fill-extrusion-opacity': .6,
+        'fill-extrusion-opacity': 0.6,
       },
     });
   }

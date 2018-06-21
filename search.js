@@ -8,7 +8,7 @@ class Search {
   search() {
     loadedMap.clearPoints();
     return fetch(`https://api.foursquare.com/v2/venues/search?ll=${loadedMap.map.getCenter().lat},${loadedMap.map.getCenter().lng}&query=${this.searchTerm}&oauth_token=${foursquareKey}`)
-      .then(res => res.json()).then(json => this.createVenues(json))
+      .then(res => res.json()).then(json => this.createVenues(json));
   }
 
   addSearchResults() {
@@ -20,7 +20,8 @@ class Search {
       venues.response.venues.forEach((venue) => {
         resolve(new Venue(venue.name, venue.location.lat, venue.location.lng, venue.location.formattedAddress, venue.categories[0].name, venue.contact.phone, venue.id));
       });
-    }).then(loadedMap.plotVenues())
+    }).then(sortByDistance())
+      .then(loadedMap.plotVenues())
       .then(this.addSearchResults())
       .then(Venue.all.forEach(venue => venue.infoPage()));
   }
