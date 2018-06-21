@@ -27,7 +27,7 @@ class Venue {
     savedPosition.push(loadedMap.map.getCenter());
     savedPosition.push(loadedMap.map.getZoom());
     const resultsDiv = document.querySelector('div#results');
-    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 17.5, 55, 0.7);
+    loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 17.5, 55, 0.8);
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML +=
         `<div id="show-venue">

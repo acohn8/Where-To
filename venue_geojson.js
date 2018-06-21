@@ -1,7 +1,7 @@
 function makeGeoJson() {
   return {
     id: 'venues',
-    type: 'circle',
+    type: 'symbol',
     source: {
       type: 'geojson',
       data: {
@@ -19,11 +19,10 @@ function makeGeoJson() {
         })),
       },
     },
-    paint: {
-      'circle-color': '#8a8acb',
-      'circle-radius': 6,
-      'circle-stroke-width': 1.5,
-      'circle-stroke-color': '#ffffff',
+    layout: {
+      'icon-image': 'marker-15',
+      'icon-size': 2,
     },
+    paint: {},
   };
 }

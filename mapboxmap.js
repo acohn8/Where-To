@@ -8,7 +8,7 @@ class MapboxMap {
   constructor() {
     this.map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/adamcohn/cjim8q06y01b52srxxq1an9sy',
       center: [-98.5795, 39.8283],
       zoom: 4,
     });
@@ -35,7 +35,14 @@ class MapboxMap {
     this.map.addControl(geoLocate);
     geoLocate.on('geolocate', (e) => {
       userLocation = { lng: e.coords.longitude, lat: e.coords.latitude };
+      this.zoomToLocation(userLocation)
+      // this.map.setPitch(0)
     });
+  }
+
+  addZoomControl() {
+    const nav = new mapboxgl.NavigationControl();
+    this.map.addControl(nav);
   }
 
   plotVenues() {
@@ -74,7 +81,7 @@ class MapboxMap {
       type: 'fill-extrusion',
       minzoom: 15.5,
       paint: {
-        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-color': '#B2B1AE',
         'fill-extrusion-height': [
           'interpolate', ['linear'], ['zoom'],
           15, 0,
@@ -85,7 +92,7 @@ class MapboxMap {
           15, 0,
           15.05, ['get', 'min_height'],
         ],
-        'fill-extrusion-opacity': 0.2,
+        'fill-extrusion-opacity': .6,
       },
     });
   }
@@ -93,10 +100,11 @@ class MapboxMap {
 
 function init() {
   const map = new MapboxMap();
-  map.enableReCentering();
   enableSearch();
   map.map.on('load', () => {
+    map.enableReCentering();
     map.getUserLocation();
+    map.addZoomControl();
     map.enable3D();
   });
 }
