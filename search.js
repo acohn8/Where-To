@@ -9,9 +9,9 @@ class Search {
     loadedMap.clearPoints();
     if (userLocation.length !== 0) {
       return [userLocation[1], userLocation[0]];
-    } else {
-      return [loadedMap.map.getCenter().lat, loadedMap.map.getCenter().lng];
     }
+      return [loadedMap.map.getCenter().lat, loadedMap.map.getCenter().lng];
+
   }
 
   searchByView() {
@@ -19,7 +19,7 @@ class Search {
     disclaimerDiv.addEventListener('click', () => {
       userLocation = [];
       disclaimerDiv.innerHTML = '';
-    })
+    });
   }
 
   search() {

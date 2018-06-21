@@ -15,7 +15,7 @@ class Venue {
   }
 
   infoDiv() {
-    return document.querySelector(`[data-id='${this.foursquareId}']`);
+    return document.querySelector(`div#venue[data-id='${this.foursquareId}']`);
   }
 
   infoPage() {
@@ -38,6 +38,18 @@ class Venue {
     return turf.distance(from, to, options);
   }
 
+  getReviews() {
+    fetch(`http://localhost:3000/api/v1/places`)
+      .then(res => res.json())
+      .then(json => this.filterReviews(json));
+  }
+
+  filterReviews(json) {
+    const resultDiv = document.getElementById("show-venue")
+    const resultDataId = resultDiv.getAttribute("data-id")
+    return json.data.find(place => place.attributes['foursquare-id'] === resultDataId)
+  }
+
   renderInfo() {
     savedPosition.push(loadedMap.map.getCenter());
     savedPosition.push(loadedMap.map.getZoom());
@@ -45,7 +57,7 @@ class Venue {
     loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 16.77, 55, 0.8);
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML +=
-        `<div id="show-venue">
+        `<div id="show-venue" data-id="${this.foursquareId}">
           <div id='back'>Back</div>
             <h2>${this.name}</h2>
             <strong>${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</strong>
