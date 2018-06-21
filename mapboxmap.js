@@ -1,5 +1,7 @@
 mapboxgl.accessToken = '';
 
+let userLocation;
+
 let loadedMap;
 
 class MapboxMap {
@@ -13,8 +15,10 @@ class MapboxMap {
     loadedMap = this;
   }
 
-  zoomToLocation(coords, newZoom = 14) {
-    this.map.flyTo({ center: coords, zoom: newZoom });
+  zoomToLocation(coords, newZoom = 14.5, newPitch = 0, newSpeed = 1.2) {
+    this.map.flyTo({
+      center: coords, zoom: newZoom, pitch: newPitch, speed: newSpeed,
+    });
   }
 
   clearPoints() {
@@ -27,11 +31,11 @@ class MapboxMap {
   }
 
   getUserLocation() {
-    this.map.addControl(new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-    }));
+    const geoLocate = new mapboxgl.GeolocateControl();
+    this.map.addControl(geoLocate);
+    geoLocate.on('geolocate', (e) => {
+      userLocation = { lng: e.coords.longitude, lat: e.coords.latitude };
+    });
   }
 
   plotVenues() {
@@ -42,6 +46,7 @@ class MapboxMap {
 
   createBoundingBox() {
     const boundingBox = turf.bbox(this.map.getSource('venues')._data);
+    this.map.setPitch(0);
     this.map.fitBounds(boundingBox, { padding: 10 });
   }
 
@@ -59,13 +64,41 @@ class MapboxMap {
       this.map.getCanvas().style.cursor = '';
     });
   }
+
+  enable3D() {
+    this.map.addLayer({
+      id: '3d-buildings',
+      source: 'composite',
+      'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'],
+      type: 'fill-extrusion',
+      minzoom: 15.5,
+      paint: {
+        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-height': [
+          'interpolate', ['linear'], ['zoom'],
+          15, 0,
+          15.05, ['get', 'height'],
+        ],
+        'fill-extrusion-base': [
+          'interpolate', ['linear'], ['zoom'],
+          15, 0,
+          15.05, ['get', 'min_height'],
+        ],
+        'fill-extrusion-opacity': 0.2,
+      },
+    });
+  }
 }
 
 function init() {
   const map = new MapboxMap();
-  map.getUserLocation();
   map.enableReCentering();
   enableSearch();
+  map.map.on('load', () => {
+    map.getUserLocation();
+    map.enable3D();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', (init));
