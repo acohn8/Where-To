@@ -34,9 +34,11 @@ class MapboxMap {
     const geoLocate = new mapboxgl.GeolocateControl();
     this.map.addControl(geoLocate);
     geoLocate.on('geolocate', (e) => {
+      const disclaimerDiv = document.querySelector('div#search-disclaimer');
       userLocation = [];
       userLocation.push(e.coords.longitude);
       userLocation.push(e.coords.latitude);
+      disclaimerDiv.innerHTML += '<p>You are searching relative to your current location. Click here to search relative to the center of the map.</p>'
       this.zoomToLocation(userLocation);
     });
   }
@@ -50,7 +52,6 @@ class MapboxMap {
     this.map.addLayer(makeGeoJson());
     this.createBoundingBox();
   }
-
 
   createBoundingBox() {
     const boundingBox = turf.bbox(this.map.getSource('venues')._data);
@@ -101,12 +102,12 @@ class MapboxMap {
 
 function init() {
   const map = new MapboxMap();
-  enableSearch();
   map.map.on('load', () => {
     map.enableReCentering();
     map.getUserLocation();
     map.addZoomControl();
     map.enable3D();
+    enableSearch();
   });
 }
 

@@ -25,6 +25,5 @@ function makeGeoJson() {
       'circle-stroke-width': 1.2,
       'circle-stroke-color': '#ffffff',
     },
-
   };
 }

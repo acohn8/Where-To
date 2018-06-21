@@ -5,9 +5,25 @@ class Search {
     this.searchTerm = searchTerm;
   }
 
-  search() {
+  searchCoords() {
     loadedMap.clearPoints();
-    return fetch(`https://api.foursquare.com/v2/venues/search?ll=${loadedMap.map.getCenter().lat},${loadedMap.map.getCenter().lng}&query=${this.searchTerm}&oauth_token=${foursquareKey}`)
+    if (userLocation.length !== 0) {
+      return [userLocation[1], userLocation[0]];
+    } else {
+      return [loadedMap.map.getCenter().lat, loadedMap.map.getCenter().lng];
+    }
+  }
+
+  searchByView() {
+    const disclaimerDiv = document.querySelector('div#search-disclaimer');
+    disclaimerDiv.addEventListener('click', () => {
+      userLocation = [];
+      disclaimerDiv.innerHTML = '';
+    })
+  }
+
+  search() {
+    return fetch(`https://api.foursquare.com/v2/venues/search?ll=${this.searchCoords()[0]},${this.searchCoords()[1]}&query=${this.searchTerm}&oauth_token=${foursquareKey}`)
       .then(res => res.json()).then(json => this.createVenues(json));
   }
 
@@ -33,6 +49,7 @@ function enableSearch() {
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const foursquareSearch = new Search(searchBox.value);
+    foursquareSearch.searchByView();
     foursquareSearch.search();
   });
 }

@@ -12,6 +12,17 @@ h2 {
   color: #7676AD;
 }
 
+#search-disclaimer {
+  font-size: 11px;
+  color: gray;
+}
+
+#search-disclaimer:hover {
+  cursor: pointer;
+  font-size: 11px;
+  color: gray;
+}
+
 #header {
   background-color: ;
   color: #7676AD;
