@@ -34,17 +34,40 @@ class Venue {
     const to = [this.longitude, this.latitude];
     return turf.distance(from, to, options);
   }
-
-  getReviews() {
-    fetch(`http://localhost:3000/api/v1/places`)
-    .then(res => res.json())
-    .then(json => this.filterReviews(json));
+  getRequest(options = {}) {
+    return fetch('http://localhost:3000/api/v1/places', options)
+      .then(res => res.json());
   }
 
-  filterReviews(json) {
-    const resultDiv = document.getElementById("show-venue")
-    const resultDataId = resultDiv.getAttribute("data-id")
-    return json.data.find(place => place.attributes['foursquare-id'] === resultDataId)
+  getReviewIds() {
+    this.getRequest()
+      .then(json => json.data)
+      .then(places => places.forEach(place => this.checkMatch(place)));
+  }
+
+  getAllReviews() {
+    return this.getRequest()
+      .then(json => json.included);
+  }
+
+  checkMatch(place) {
+    const placeId = place.attributes['foursquare-id'];
+    if (placeId === this.foursquareId) {
+      const matchingIds = place.relationships.reviews.data.map(review => review.id);
+      this.getAllReviews()
+        .then(reviews => reviews
+          .filter(review => matchingIds.includes(review.id))
+          .forEach(review => this.appendReview(review)));
+    }
+  }
+
+  appendReview(review) {
+    const reviewsDiv = document.querySelector('div#show-reviews');
+    const reviewHeader = document.querySelector('div#review-header')
+    reviewHeader.innerHTML = '<h4>Messages</h4>'
+    reviewsDiv.innerHTML +=
+      `<div id='review'> <h5>${review.attributes.user}</h5>
+        <p>${review.attributes.content}</p> </div>`;
   }
 
   renderInfo() {
@@ -53,9 +76,10 @@ class Venue {
     const resultsDiv = document.querySelector('div#results');
     const backSpan = document.querySelector('span#back');
     loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 16.77, 55, 0.8);
-    backSpan.innerText = 'Back to results'
+    backSpan.innerText = 'Back to results';
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML = this.makeVenueShowPage();
+    this.getReviewIds();
     this.backToFullListing();
   }
 
@@ -73,12 +97,13 @@ class Venue {
   }
 
   makeVenueCard() {
-    return `<div class="card" id="venue" data-id="${this.foursquareId}">
-    <div class="card-body">
-    <h4 class="card-title">${this.name}</h4>
-    <h6 class="card-subtitle mb-2 text-muted">${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</h6>
-    <p class="card-text">${this.formattedAddress[0]}</p>
-    </div>
+    return `
+    <div class="card" id="venue" data-id="${this.foursquareId}">
+      <div class="card-body">
+        <h4 class="card-title">${this.name}</h4>
+        <h6 class="card-subtitle mb-2 text-muted">${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</h6>
+        <p class="card-text">${this.formattedAddress[0]}</p>
+      </div>
     </div>`;
   }
 
@@ -91,10 +116,12 @@ class Venue {
       <p>${this.phone}</p>
     </div>
     <form id="new-review" class="form-group">
-      <h3>Leave a review</h3>
+      <h3>Leave a Message</h3>
       <input type="text" class="form-control" placeholder="Name" id="inputDefault">
-      <textarea class="form-control" id="exampleTextarea" rows="8" placeholder="Review"></textarea>
-    </form>
+      <textarea class="form-control" id="exampleTextarea" rows="5" placeholder="What's on your mind?"></textarea>
+      </form>
+    <div id="review-header"></div>
+    <div id="show-reviews"></div>
   </div>`;
   }
 
