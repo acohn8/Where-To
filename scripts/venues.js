@@ -36,7 +36,7 @@ class Venue {
   }
 
   makeGetFetch() {
-    return fetch('http://localhost:3000/api/v1/places')
+    return fetch('https://serene-retreat-76281.herokuapp.com/api/v1/places')
       .then(res => res.json());
   }
 
@@ -80,7 +80,7 @@ class Venue {
   }
 
   makePostFetch(options) {
-    fetch('http://localhost:3000/api/v1/places', options)
+    fetch('https://serene-retreat-76281.herokuapp.com/api/v1/places', options)
       .then(res => res.json()).then(json => json);
   }
 
