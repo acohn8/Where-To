@@ -10,12 +10,12 @@ class Search {
     if (userLocation.length !== 0) {
       return [userLocation[1], userLocation[0]];
     }
-      return [loadedMap.map.getCenter().lat, loadedMap.map.getCenter().lng];
+    return [loadedMap.map.getCenter().lat, loadedMap.map.getCenter().lng];
 
   }
 
   searchByView() {
-    const disclaimerDiv = document.querySelector('div#search-disclaimer');
+    const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
     disclaimerDiv.addEventListener('click', () => {
       userLocation = [];
       disclaimerDiv.innerHTML = '';
@@ -24,7 +24,7 @@ class Search {
 
   search() {
     return fetch(`https://api.foursquare.com/v2/venues/search?ll=${this.searchCoords()[0]},${this.searchCoords()[1]}&query=${this.searchTerm}&oauth_token=${foursquareKey}`)
-      .then(res => res.json()).then(json => this.createVenues(json));
+    .then(res => res.json()).then(json => this.createVenues(json));
   }
 
   addSearchResults() {
@@ -34,22 +34,24 @@ class Search {
   createVenues(venues) {
     return new Promise((resolve) => {
       venues.response.venues.forEach((venue) => {
-        resolve(new Venue(venue.name, venue.location.lat, venue.location.lng, venue.location.formattedAddress, venue.categories[0].name, venue.contact.phone, venue.id));
+        resolve(new Venue(venue.name, venue.location.lat, venue.location.lng, venue.location.formattedAddress, venue.categories[0].name, venue.contact.formattedPhone, venue.id));
       });
     }).then(sortByDistance())
-      .then(loadedMap.plotVenues())
-      .then(this.addSearchResults())
-      .then(Venue.all.forEach(venue => venue.infoPage()));
+    .then(loadedMap.plotVenues())
+    .then(this.addSearchResults())
+    .then(Venue.all.forEach(venue => venue.infoPage()));
   }
 }
 
 function enableSearch() {
-  const searchBox = document.querySelector('input#search-box');
+  const searchBox = document.getElementById("inputLarge search-box")
   const searchForm = document.querySelector('form#search');
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const foursquareSearch = new Search(searchBox.value);
-    foursquareSearch.searchByView();
     foursquareSearch.search();
+    if (userLocation.length === 2) {
+      foursquareSearch.searchByView();
+    }
   });
 }

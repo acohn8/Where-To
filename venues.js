@@ -1,5 +1,3 @@
-let savedPosition = [];
-
 class Venue {
   constructor(name, latitude, longitude, formattedAddress, category, phone, foursquareId) {
     this.name = name;
@@ -10,7 +8,6 @@ class Venue {
     this.category = category;
     this.phone = phone;
     this.foursquareId = foursquareId;
-    this.id = ++venueId;
     Venue.all.push(this);
   }
 
@@ -40,8 +37,8 @@ class Venue {
 
   getReviews() {
     fetch(`http://localhost:3000/api/v1/places`)
-      .then(res => res.json())
-      .then(json => this.filterReviews(json));
+    .then(res => res.json())
+    .then(json => this.filterReviews(json));
   }
 
   filterReviews(json) {
@@ -54,30 +51,20 @@ class Venue {
     savedPosition.push(loadedMap.map.getCenter());
     savedPosition.push(loadedMap.map.getZoom());
     const resultsDiv = document.querySelector('div#results');
+    const backSpan = document.querySelector('span#back');
     loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 16.77, 55, 0.8);
+    backSpan.innerText = 'Back to results'
     resultsDiv.innerHTML = '';
-    resultsDiv.innerHTML +=
-        `<div id="show-venue" data-id="${this.foursquareId}">
-          <div id='back'>Back</div>
-            <h2>${this.name}</h2>
-            <strong>${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</strong>
-            <p><em>${this.category}</em></p>
-            <p>${this.formattedAddress}</p>
-            <p>${this.phone}</p>
-            <form id="new-review">
-              <h3>Leave a review</h3>
-              <input type="text" id="user-name" placeholder="Name"> <br/>
-              <textarea id="venue-review" placeholder="Review"> </textarea><br/>
-            </form>
-        </div>`;
+    resultsDiv.innerHTML = this.makeVenueShowPage();
     this.backToFullListing();
   }
 
   backToFullListing() {
     const resultsDiv = document.querySelector('div#results');
-    const backDiv = document.querySelector('div#back');
-    backDiv.addEventListener('click', () => {
+    const backSpan = document.querySelector('span#back');
+    backSpan.addEventListener('click', () => {
       resultsDiv.innerHTML = '';
+      backSpan.innerHTML = '';
       Venue.all.forEach(venue => venue.appendResults());
       Venue.all.forEach(venue => venue.infoPage());
       loadedMap.zoomToLocation(savedPosition[0], savedPosition[1]);
@@ -85,14 +72,35 @@ class Venue {
     });
   }
 
+  makeVenueCard() {
+    return `<div class="card" id="venue" data-id="${this.foursquareId}">
+    <div class="card-body">
+    <h4 class="card-title">${this.name}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</h6>
+    <p class="card-text">${this.formattedAddress[0]}</p>
+    </div>
+    </div>`;
+  }
+
+  makeVenueShowPage() {
+    return `<div id="show-venue" data-id="${this.foursquareId}">
+    <div class="venue-card">
+      <h2>${this.name}</h2>
+      <p class="lead">${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles</p>
+      <p>${this.formattedAddress.join('<br/>')}</p>
+      <p>${this.phone}</p>
+    </div>
+    <form id="new-review" class="form-group">
+      <h3>Leave a review</h3>
+      <input type="text" class="form-control" placeholder="Name" id="inputDefault">
+      <textarea class="form-control" id="exampleTextarea" rows="8" placeholder="Review"></textarea>
+    </form>
+  </div>`;
+  }
+
   appendResults() {
     const venueList = document.querySelector('div#results');
-    venueList.innerHTML +=
-      `<div id="venue" data-id="${this.foursquareId}">
-        <h3>${this.name}</h3>
-        <strong>${(Math.ceil(this.distance * 20) / 20).toFixed(2)} miles </strong>
-        <p>${this.formattedAddress[0]}</p>
-      </div>`;
+    venueList.innerHTML += this.makeVenueCard();
   }
 }
 
@@ -100,5 +108,4 @@ function sortByDistance() {
   Venue.all.sort((a, b) => a.distance - b.distance);
 }
 
-let venueId = 0;
 Venue.all = [];

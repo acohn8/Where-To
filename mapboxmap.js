@@ -1,6 +1,7 @@
 mapboxgl.accessToken = '';
 
 let userLocation = [];
+let savedPosition = [];
 
 let loadedMap;
 
@@ -30,16 +31,33 @@ class MapboxMap {
     }
   }
 
+  routeGeolocatedView() {
+    const searchBox = document.getElementById('inputLarge search-box');
+    if (searchBox.value.length > 0) {
+      const foursquareSearch = new Search(searchBox.value);
+      foursquareSearch.search();
+    }
+    this.zoomToLocation(userLocation);
+  }
+
+  locationAlert() {
+    return `<div class="alert alert-dismissible alert-primary">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Searching relative to your current location.</strong> Dismiss to search by map view.
+    </div>`;
+  }
+
   getUserLocation() {
     const geoLocate = new mapboxgl.GeolocateControl();
     this.map.addControl(geoLocate);
     geoLocate.on('geolocate', (e) => {
       const disclaimerDiv = document.querySelector('div#search-disclaimer');
       userLocation = [];
+      this.clearPoints();
       userLocation.push(e.coords.longitude);
       userLocation.push(e.coords.latitude);
-      disclaimerDiv.innerHTML += '<p>You are searching relative to your current location. Click here to search relative to the center of the map.</p>'
-      this.zoomToLocation(userLocation);
+      disclaimerDiv.innerHTML = this.locationAlert();
+      this.routeGeolocatedView();
     });
   }
 
@@ -112,4 +130,3 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', (init));
-

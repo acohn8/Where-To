@@ -1,59 +1,37 @@
 body {
-  color: #404040;
   margin: 0;
   padding: 0;
 }
 
-h3 {
-  color: #7676AD;
-}
-
-h2 {
-  color: #7676AD;
-}
-
-#search-disclaimer {
-  font-size: 11px;
-  color: gray;
-}
-
-#search-disclaimer:hover {
-  cursor: pointer;
-  font-size: 11px;
-  color: gray;
-}
-
 #header {
-  background-color: ;
   color: #7676AD;
+  margin-bottom: 15px;
 }
 
-#search {
-  max-width: 95%;
+.card {
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 #search-box {
   margin-top: 10px;
-  width: 95%;
-  height: 30px;
-  font-size: 18px;
+  font-size: 18px; */
   display: inline-block;
 }
-#venue {
-  border-bottom: 1px solid #eee;
-}
+
 #venue:hover {
   background-color: silver;
   cursor: pointer;
 }
 #back:hover {
-  margin: 10px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 #back {
-  margin: 10px;
+  margin-bottom: 10px;
 }
+
 
 #overlay {
   float: left;
@@ -63,13 +41,16 @@ h2 {
   max-height: 100%;
   overflow: scroll;
   padding-left: 10px;
-  padding-right: 10px;
+  padding-right: 10px; */
   border-right: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-#user-name {
-  width: 90%;
+#inputDefault {
   margin-bottom: 10px;
+}
+
+.venue-card {
+  margin-bottom: 15px;
 }
 
 #venue-review {
