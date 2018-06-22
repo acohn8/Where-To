@@ -1,3 +1,5 @@
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
+
 let userLocation = [];
 
 let loadedMap;

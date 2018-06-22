@@ -1,3 +1,4 @@
+foursquareKey = 'LGVNCYIU5YP2WT4PCRYZP0XS1EJPIRLZZDLJF3QU1YTYDMD5&v=20180622'
 class Search {
   constructor(searchTerm) {
     this.searchTerm = searchTerm;
