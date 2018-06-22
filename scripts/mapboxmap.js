@@ -86,6 +86,7 @@ class MapboxMap {
     this.map.on('mouseenter', 'venues', () => {
       this.map.getCanvas().style.cursor = 'pointer';
     });
+
     this.map.on('mouseleave', 'venues', () => {
       this.map.getCanvas().style.cursor = '';
     });

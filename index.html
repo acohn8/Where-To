@@ -8,10 +8,10 @@
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-  <script src="search.js"></script>
-  <script src="mapboxmap.js"></script>
-  <script src="venue_geojson.js"></script>
-  <script src="venues.js"></script>
+  <script src="scripts/search.js"></script>
+  <script src="scripts/mapboxmap.js"></script>
+  <script src="scripts/venue_geojson.js"></script>
+  <script src="scripts/venues.js"></script>
   <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-+YpxMU1QQywaQtI3dMQAwIcu0vVDuOREjQPC59qblQHg9nTdcrUXMPnanUaldUnY" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -22,10 +22,10 @@
   <div id="overlay">
     <div id="header-container"><h1 id="header">Where to?</h1></div>
     <form id="search">
-    <div class="form-group">
+      <div class="form-group">
         <input class='form-control form-control-lg' type='text' id='inputLarge search-box' placeholder='search'>
-    </div>
-  </form>
+      </div>
+    </form>
     <span class="badge badge-secondary" id="back"></span>
     <div id="search-disclaimer"></div>
     <div id="results"></div>

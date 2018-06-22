@@ -121,6 +121,15 @@ class Venue {
     this.submitNewReview();
     this.hideHeader();
     this.backToFullListing();
+    this.enableBackButton();
+  }
+
+  enableBackButton() {
+    const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
+    disclaimerDiv.addEventListener('click', () => {
+      userLocation = [];
+      disclaimerDiv.innerHTML = '';
+    });
   }
 
   hideHeader() {
@@ -146,7 +155,7 @@ class Venue {
       this.showHeader();
       Venue.all.forEach(venue => venue.appendResults());
       Venue.all.forEach(venue => venue.infoPage());
-      loadedMap.createBoundingBox()
+      loadedMap.createBoundingBox();
     });
   }
 
