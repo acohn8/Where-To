@@ -1,5 +1,5 @@
 class Venue {
-  constructor(name, latitude, longitude, formattedAddress, category, phone, foursquareId) {
+  constructor(name, latitude, longitude, formattedAddress = '', category = '', phone = '', foursquareId) {
     this.name = name;
     this.latitude = latitude;
     this.longitude = longitude;
@@ -111,8 +111,6 @@ class Venue {
   }
 
   renderInfo() {
-    savedPosition.push(loadedMap.map.getCenter());
-    savedPosition.push(loadedMap.map.getZoom());
     const resultsDiv = document.querySelector('div#results');
     const backSpan = document.querySelector('span#back');
     loadedMap.zoomToLocation({ lng: this.longitude, lat: this.latitude }, 16.77, 55, 0.8);
@@ -148,12 +146,7 @@ class Venue {
       this.showHeader();
       Venue.all.forEach(venue => venue.appendResults());
       Venue.all.forEach(venue => venue.infoPage());
-      if (userLocation.length === 2) {
-        loadedMap.zoomToLocation(userLocation, savedPosition[1]);
-      } else {
-        loadedMap.zoomToLocation(savedPosition[0], savedPosition[1]);
-      }
-      savedPosition = [];
+      loadedMap.createBoundingBox()
     });
   }
 

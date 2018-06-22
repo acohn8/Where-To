@@ -1,7 +1,6 @@
 mapboxgl.accessToken = '';
 
 let userLocation = [];
-let savedPosition = [];
 
 let loadedMap;
 
