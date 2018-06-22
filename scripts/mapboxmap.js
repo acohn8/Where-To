@@ -60,6 +60,13 @@ class MapboxMap {
     });
   }
 
+  locateUserFromText() {
+    const textArea = document.querySelector('small#geolocate-text');
+    textArea.addEventListener('click', () => {
+      $(".mapboxgl-ctrl-geolocate").click();
+    })
+  }
+
   addZoomControl() {
     const nav = new mapboxgl.NavigationControl();
     this.map.addControl(nav);
@@ -123,6 +130,7 @@ function init() {
   map.map.on('load', () => {
     map.enableReCentering();
     map.getUserLocation();
+    map.locateUserFromText();
     map.addZoomControl();
     map.enable3D();
     enableSearch();

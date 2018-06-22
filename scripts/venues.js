@@ -125,11 +125,13 @@ class Venue {
   }
 
   enableBackButton() {
-    const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
-    disclaimerDiv.addEventListener('click', () => {
-      userLocation = [];
-      disclaimerDiv.innerHTML = '';
-    });
+    if (userLocation.length === 2) {
+      const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
+      disclaimerDiv.addEventListener('click', () => {
+        userLocation = [];
+        disclaimerDiv.innerHTML = '';
+      });
+    }
   }
 
   hideHeader() {

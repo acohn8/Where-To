@@ -1,4 +1,4 @@
-foursquareKey = 'LGVNCYIU5YP2WT4PCRYZP0XS1EJPIRLZZDLJF3QU1YTYDMD5&v=20180622'
+foursquareKey = 'LGVNCYIU5YP2WT4PCRYZP0XS1EJPIRLZZDLJF3QU1YTYDMD5&v=20180622';
 class Search {
   constructor(searchTerm) {
     this.searchTerm = searchTerm;
@@ -13,11 +13,13 @@ class Search {
   }
 
   searchByView() {
-    const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
-    disclaimerDiv.addEventListener('click', () => {
-      userLocation = [];
-      disclaimerDiv.innerHTML = '';
-    });
+    if (userLocation.length === 2) {
+      const disclaimerDiv = document.querySelector('#search-disclaimer > div > button');
+      disclaimerDiv.addEventListener('click', () => {
+        userLocation = [];
+        disclaimerDiv.innerHTML = '';
+      });
+    }
   }
 
   search() {

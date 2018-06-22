@@ -5,7 +5,11 @@ body {
 
 #header {
   color: #327AB6;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+#geolocate-text:hover {
+  cursor: pointer;
 }
 
 .hide {
@@ -19,7 +23,7 @@ body {
 
 #search-box {
   margin-top: 10px;
-  font-size: 18px; */
+  font-size: 18px;
   display: inline-block;
 }
 
