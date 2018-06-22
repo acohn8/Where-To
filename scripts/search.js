@@ -1,5 +1,3 @@
-const foursquareKey = '';
-
 class Search {
   constructor(searchTerm) {
     this.searchTerm = searchTerm;

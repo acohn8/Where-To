@@ -1,5 +1,3 @@
-mapboxgl.accessToken = '';
-
 let userLocation = [];
 
 let loadedMap;
