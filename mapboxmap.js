@@ -41,7 +41,7 @@ class MapboxMap {
   }
 
   locationAlert() {
-    return `<div class="alert alert-dismissible alert-primary">
+    return `<div class="alert alert-dismissible alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Searching relative to your current location.</strong> Dismiss to search by map view.
     </div>`;

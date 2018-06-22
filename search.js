@@ -44,10 +44,10 @@ class Search {
 }
 
 function enableSearch() {
-  const searchBox = document.getElementById("inputLarge search-box")
   const searchForm = document.querySelector('form#search');
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const searchBox = document.getElementById('inputLarge search-box')
     const foursquareSearch = new Search(searchBox.value);
     foursquareSearch.search();
     if (userLocation.length === 2) {

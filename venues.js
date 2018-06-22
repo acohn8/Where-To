@@ -34,19 +34,20 @@ class Venue {
     const to = [this.longitude, this.latitude];
     return turf.distance(from, to, options);
   }
-  getRequest(options = {}) {
-    return fetch('http://localhost:3000/api/v1/places', options)
+
+  makeGetFetch() {
+    return fetch('http://localhost:3000/api/v1/places')
       .then(res => res.json());
   }
 
   getReviewIds() {
-    this.getRequest()
+    this.makeGetFetch()
       .then(json => json.data)
       .then(places => places.forEach(place => this.checkMatch(place)));
   }
 
   getAllReviews() {
-    return this.getRequest()
+    return this.makeGetFetch()
       .then(json => json.included);
   }
 
@@ -57,17 +58,56 @@ class Venue {
       this.getAllReviews()
         .then(reviews => reviews
           .filter(review => matchingIds.includes(review.id))
-          .forEach(review => this.appendReview(review)));
+          .forEach(review => this.formatReview(review)));
     }
+  }
+
+  formatReview(json) {
+    this.appendReview({ user: json.attributes.user, content: json.attributes.content });
   }
 
   appendReview(review) {
     const reviewsDiv = document.querySelector('div#show-reviews');
-    const reviewHeader = document.querySelector('div#review-header')
-    reviewHeader.innerHTML = '<h4>Messages</h4>'
-    reviewsDiv.innerHTML +=
-      `<div id='review'> <h5>${review.attributes.user}</h5>
-        <p>${review.attributes.content}</p> </div>`;
+    const reviewHeader = document.querySelector('div#review-header');
+    reviewHeader.innerHTML = '<h4>Messages</h4>';
+    reviewsDiv.innerHTML += `
+    <div class="card bg-light mb-3">
+    <div class="card-body">
+      <h4 class="card-title">${review.user}</h4>
+      <p class="card-text">${review.content}</p>
+    </div>
+  </div>`;
+  }
+
+  makePostFetch(options) {
+    fetch('http://localhost:3000/api/v1/places', options)
+      .then(res => res.json()).then(json => json);
+  }
+
+  submitNewReview() {
+    const button = document.querySelector('button#submit-message');
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nameField = document.querySelector('input#inputDefault');
+      const messageField = document.querySelector('textarea.form-control');
+      const newMessage = { place: { foursquare_id: this.foursquareId, reviews: [{ user: nameField.value, content: messageField.value }] } };
+      this.makePostRequest(newMessage);
+      this.appendReview({ user: nameField.value, content: messageField.value });
+      nameField.value = '';
+      messageField.value = '';
+    });
+  }
+
+  makePostRequest(message) {
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(message),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+    this.makePostFetch(options);
   }
 
   renderInfo() {
@@ -80,7 +120,23 @@ class Venue {
     resultsDiv.innerHTML = '';
     resultsDiv.innerHTML = this.makeVenueShowPage();
     this.getReviewIds();
+    this.submitNewReview();
+    this.hideHeader();
     this.backToFullListing();
+  }
+
+  hideHeader() {
+    const header = document.querySelector('div#header-container');
+    const search = document.querySelector('form#search');
+    header.classList.add('hide');
+    search.classList.add('hide');
+  }
+
+  showHeader() {
+    const header = document.querySelector('div#header-container');
+    const search = document.querySelector('form#search');
+    header.classList.remove('hide');
+    search.classList.remove('hide');
   }
 
   backToFullListing() {
@@ -89,9 +145,14 @@ class Venue {
     backSpan.addEventListener('click', () => {
       resultsDiv.innerHTML = '';
       backSpan.innerHTML = '';
+      this.showHeader();
       Venue.all.forEach(venue => venue.appendResults());
       Venue.all.forEach(venue => venue.infoPage());
-      loadedMap.zoomToLocation(savedPosition[0], savedPosition[1]);
+      if (userLocation.length === 2) {
+        loadedMap.zoomToLocation(userLocation, savedPosition[1]);
+      } else {
+        loadedMap.zoomToLocation(savedPosition[0], savedPosition[1]);
+      }
       savedPosition = [];
     });
   }
@@ -119,6 +180,7 @@ class Venue {
       <h3>Leave a Message</h3>
       <input type="text" class="form-control" placeholder="Name" id="inputDefault">
       <textarea class="form-control" id="exampleTextarea" rows="5" placeholder="What's on your mind?"></textarea>
+      <button type="submit" class="btn btn-primary" id="submit-message">Submit</button>
       </form>
     <div id="review-header"></div>
     <div id="show-reviews"></div>

@@ -1,8 +1,7 @@
 function makeGeoJson() {
   return {
     id: 'venues',
-    // type: 'circle',
-    type: 'symbol',
+    type: 'circle',
     source: {
       type: 'geojson',
       data: {
@@ -20,15 +19,11 @@ function makeGeoJson() {
         })),
       },
     },
-    layout: {
-      'icon-image': 'new-marker-15',
-      'icon-size': 2,
-    }
-    // paint: {
-    //   'circle-color': '#8a8acb',
-    //   'circle-radius': 4.5,
-    //   'circle-stroke-width': 1.2,
-    //   'circle-stroke-color': '#ffffff',
-    // },
+    paint: {
+      'circle-color': '#F15A2D',
+      'circle-radius': 6,
+      'circle-stroke-width': 1.7,
+      'circle-stroke-color': '#ffffff',
+    },
   };
 }
